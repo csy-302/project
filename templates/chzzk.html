@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CHZZK 파트너 스트리머</title>
+    <style>
+        :root { --chzzk-neon: #00FFA3; --bg-dark: #141517; --card-dark: #1c1d20; }
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background: var(--bg-dark); color: white; margin: 0; padding: 40px 20px; }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .logo { font-size: 28px; font-weight: 900; color: var(--chzzk-neon); text-decoration: none; }
+        
+        .back-home { color: #aaa; text-decoration: none; font-size: 14px; border: 1px solid #333; padding: 8px 16px; border-radius: 20px; transition: 0.3s; }
+        .back-home:hover { border-color: var(--chzzk-neon); color: white; }
+
+        /* 그리드 레이아웃 */
+        .streamer-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .streamer-card { 
+            background: var(--card-dark); 
+            border-radius: 15px; 
+            padding: 20px; 
+            text-align: center; 
+            transition: transform 0.3s ease, border 0.3s;
+            border: 1px solid transparent;
+        }
+        .streamer-card:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--chzzk-neon);
+        }
+
+        .profile-img { 
+            width: 100px; height: 100px; 
+            border-radius: 50%; 
+            margin-bottom: 15px; 
+            border: 2px solid #333;
+            object-fit: cover;
+        }
+
+        .nickname { font-size: 16px; font-weight: bold; margin-bottom: 10px; display: block; }
+        
+        .partner-badge { 
+            display: inline-block; 
+            font-size: 11px; 
+            background: rgba(0, 255, 163, 0.1); 
+            color: var(--chzzk-neon); 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/chzzk" class="logo">CHZZK PARTNERS</a>
+            <a href="/" class="back-home">🏠 메인 화면으로</a>
+        </div>
+
+        <div class="streamer-grid">
+            {% for s in streamers %}
+            <a href="{{ s.channel_url }}" target="_blank" class="streamer-card" style="text-decoration: none; color: inherit; display: block;">
+                <img src="{{ s.profile_image }}" class="profile-img" alt="profile">
+                <span class="nickname">{{ s.nickname }}</span>
+                <span class="partner-badge">PARTNER</span>
+            </a>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</body>
+</html>

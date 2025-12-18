@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 자유 검색 서비스</title>
+    <style>
+        :root { --naver-green: #03C75A; }
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: #f5f6f7; margin: 0; padding: 0; }
+        .header { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 30px 20px; text-align: center; }
+        .search-box { display: flex; max-width: 600px; margin: 0 auto; border: 2px solid var(--naver-green); border-radius: 4px; background: #fff; overflow: hidden; }
+        .search-box input { flex: 1; border: none; padding: 15px; outline: none; font-size: 16px; }
+        .search-box button { background: var(--naver-green); color: white; border: none; padding: 0 25px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        
+        /* [날씨 위젯 스타일] */
+        .weather-widget {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .weather-info { display: flex; align-items: baseline; gap: 10px; }
+        .weather-temp { font-size: 24px; font-weight: bold; color: var(--naver-green); }
+        .weather-status { font-size: 16px; font-weight: 600; color: #333; }
+        .weather-dust { font-size: 13px; color: #666; background: #f0f0f0; padding: 2px 8px; border-radius: 4px; }
+        .weather-label { font-size: 11px; color: #aaa; margin-bottom: 4px; display: block; font-weight: bold; }
+        
+        .quote-container {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 15px 25px; /* 날씨 위젯과 동일한 패딩으로 수정 */
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        /* 네비게이션 버튼 스타일 */
+        .nav-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 25px; 
+            flex-wrap: wrap; 
+        }
+        .btn-nav { 
+            padding: 10px 18px; 
+            border-radius: 50px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: 0.2s; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #555;
+        }
+        .btn-nav:hover { background: #f8f9fa; border-color: #bbb; }
+        .btn-chzzk { background: #000; color: #00FFA3; border-color: #00FFA3; }
+        .btn-chzzk:hover { background: #1a1a1a; color: #00ffca; }
+        .btn-rank { background: #eafff3; color: #03C75A; border-color: #03C75A; }
+
+        /* 결과 아이템 스타일 */
+        .result-item { background: #fff; padding: 25px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #ebebeb; transition: box-shadow 0.3s ease; }
+        .result-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .result-item a { color: #000; font-size: 19px; text-decoration: none; font-weight: bold; }
+        .result-item a:hover { text-decoration: underline; color: var(--naver-green); }
+        .result-item p { color: #444; font-size: 15px; line-height: 1.6; margin: 12px 0; }
+        .result-item .info { color: #999; font-size: 13px; }
+        b { color: var(--naver-green); text-decoration: underline; }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <form action="/" method="get" class="search-box">
+            <input type="text" name="query" placeholder="네이버 블로그 검색" value="{{ query }}" required>
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+    <div class="container">
+        {% if weather %}
+<div class="weather-widget" style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 15px 25px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div>
+            <span class="weather-label" style="font-size: 11px; color: #aaa; font-weight: bold; display: block; margin-bottom: 4px;">실시간 날씨</span>
+            <div class="weather-info" style="display: flex; align-items: baseline; gap: 10px;">
+                <span class="weather-temp" style="font-size: 24px; font-weight: bold; color: #03C75A;">{{ weather.temp }}</span>
+                <span class="weather-status" style="font-size: 16px; font-weight: 600;">{{ weather.status }}</span>
+                <span class="weather-dust" style="font-size: 12px; color: #666; background: #f0f0f0; padding: 2px 8px; border-radius: 4px;">미세먼지 {{ weather.dust }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="border-left: 1px solid #eee; padding-left: 25px; text-align: right;">
+        <span style="font-size: 11px; color: #ff7675; font-weight: bold; display: block; margin-bottom: 4px;">🍔 오늘의 추천 메뉴</span>
+        <div style="font-size: 18px; font-weight: bold; color: #333;">
+            <span style="font-size: 20px;">🍴</span> 
+            오늘 같은 날씨엔 <span style="color: #6c5ce7;">{{ menu }}</span> 어때요?
+        </div>
+        <a href="https://map.naver.com/v5/search/{{ menu }}" 
+       target="_blank" 
+       style="display: inline-block; background: #03C75A; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; transition: background 0.2s;">
+       📍 내 주변 {{ menu }} 식당 찾기
+    </a>
+    </div>
+</div>
+{% endif %} <div class="quote-container">
+    <span style="font-size: 20px; color: #03C75A; display: block; margin-bottom: 5px; font-family: serif;">"</span>
+    <p style="font-size: 16px; font-style: italic; color: #333; margin: 0; font-weight: 500; line-height: 1.6; letter-spacing: -0.5px; word-break: keep-all;">
+        {{ quote.text }}
+    </p>
+    <p style="font-size: 12px; color: #999; margin-top: 8px; font-weight: bold;">- {{ quote.author }} -</p>
+</div>
+
+        <div class="nav-container">
+            <a href="/chzzk" class="btn-nav btn-chzzk">⚡ 치지직 파트너</a>
+            <a href="/rank/chart" class="btn-nav btn-rank">📊 검색 차트</a>
+            <a href="/rank" class="btn-nav">📝 검색 리스트</a>
+            <a href="/fortune" class="btn-nav" style="border-color: #a29bfe; color: #6c5ce7; background: #f8f7ff;">🔮 오늘의 운세</a>
+            <a href="/zodiac" class="btn-nav" style="border-color: #fab1a0; color: #e17055; background: #fff5f0;">🐾 띠별 운세</a>
+        </div>
+
+        {% if error_msg %}
+            <div style="background: #ffeded; color: #ff5252; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                {{ error_msg }}
+            </div>
+        {% endif %}
+
+        {% for item in results %}
+        <div class="result-item">
+            <a href="{{ item.link }}" target="_blank">{{ item.title | safe }}</a>
+            <p>{{ item.description | safe }}</p>
+            <div class="info">{{ item.postdate }} | {{ item.bloggername }}</div>
+        </div>
+        {% endfor %}
+    </div></body>
+</html>

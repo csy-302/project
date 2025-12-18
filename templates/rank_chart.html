@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인기 검색어 차트</title>
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #f5f6f7; display: flex; justify-content: center; padding: 50px 0; }
+        .rank-card { background: #fff; width: 550px; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        
+        .header { border-bottom: 2px solid #03C75A; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        h2 { margin: 0; font-size: 22px; }
+        
+        /* [기능] 리스트로 돌아가는 버튼 */
+        .list-btn { text-decoration: none; font-size: 14px; color: #333; background: #e9ecef; padding: 8px 12px; border-radius: 6px; font-weight: bold; }
+        .list-btn:hover { background: #dee2e6; }
+
+        .chart-row { margin-bottom: 20px; }
+        .label-group { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
+        
+        /* 순위별 숫자 강조 */
+        .rank-num { font-weight: 900; margin-right: 5px; color: #555; }
+        
+        /* 막대기 스타일 */
+        .bar-track { background: #f0f0f0; height: 16px; border-radius: 8px; width: 100%; overflow: hidden; }
+        
+        .bar-fill { 
+            /* 에디터 오류 방지: CSS 변수를 사용 */
+            width: var(--w); 
+            background-color: var(--c);
+            height: 100%; 
+            border-radius: 8px;
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="rank-card">
+        <div class="header">
+            <h2>📊 인기 검색어 차트</h2>
+            <a href="/rank" class="list-btn">📝 리스트로 보기</a>
+        </div>
+
+        <div class="chart-wrapper">
+            {% for item in rankings %}
+            <div class="chart-row">
+                <div class="label-group">
+                    <span>
+                        <span class="rank-num">{{ loop.index }}</span>
+                        <strong>{{ item.keyword }}</strong>
+                    </span>
+                    <span style="color: {{ item.color }}; font-weight: bold;">{{ item.cnt }}회</span>
+                </div>
+                <div class="bar-track">
+                    <div class="bar-fill" style="--w: {{ item.width }}%; --c: {{ item.color }};"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/" style="color: #888; text-decoration: none; font-size: 14px;">← 메인으로 이동</a>
+        </div>
+    </div>
+</body>
+</html>

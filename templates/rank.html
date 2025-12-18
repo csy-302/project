@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인기 검색어 순위</title>
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #f5f6f7; display: flex; justify-content: center; padding-top: 50px; }
+        .rank-card { background: #fff; width: 450px; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        h2 { border-bottom: 2px solid #03C75A; padding-bottom: 15px; color: #333; margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px 10px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        .num { font-weight: bold; color: #03C75A; width: 40px; font-size: 18px; }
+        .keyword { font-size: 16px; color: #333; font-weight: 500; }
+        .count { text-align: right; color: #999; font-size: 14px; }
+        .empty-msg { text-align: center; color: #aaa; padding: 40px 0; }
+        .back-btn { display: inline-block; margin-top: 25px; color: #888; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+        .back-btn:hover { color: #03C75A; }
+    </style>
+</head>
+<body>
+    <div class="rank-card">
+        <h2>🔥 실시간 인기 검색어</h2>
+        <table>
+            <tbody>
+                {% for rank in rankings %}
+                <tr>
+                    <td class="num">{{ loop.index }}</td>
+                    <td class="keyword">{{ rank['keyword'] }}</td>
+                    <td class="count">{{ rank['cnt'] }}회 검색</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="empty-msg">아직 저장된 검색 기록이 없습니다.<br>먼저 검색을 진행해 주세요!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/" class="back-btn">← 메인으로 이동</a>
+    </div>
+    <div style="text-align: right; margin-bottom: 20px;">
+    <a href="/rank/chart" style="padding: 8px 15px; background: #03C75A; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">📊 차트로 보기</a>
+</div>
+</body>
+</html>
