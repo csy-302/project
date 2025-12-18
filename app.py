@@ -13,7 +13,7 @@ DB_PATH = os.path.join(BASE_DIR, 'search_db.db')
 
 # 네이버 API 설정 (발급받은 키 입력)
 CLIENT_ID = "5jqT2Bae0s2_LI6FdhOv"
-CLIENT_SECRET = "0m91tRfWwn"
+CLIENT_SECRET = ""
 
 def get_db_connection():
     # 데이터베이스 연결 및 딕셔너리 형태 설정
